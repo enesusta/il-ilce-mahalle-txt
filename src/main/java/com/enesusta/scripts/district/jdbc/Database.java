@@ -10,8 +10,8 @@ public class Database {
 
     private String hostName = "jdbc:mysql://127.0.0.1:3306/user1?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8" +
         "&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private String id = "";
-    private String pass = "";
+    private String id = "root";
+    private String pass = "axanthi912";
 
     private static volatile Database instance = null;
     private static Object LOCK = new Object();
