@@ -58,7 +58,7 @@ public class Cities implements Read, Initialize {
 
                     for(String str : mahalleBilgisi)
                         printStream.println(str);
-                    
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
