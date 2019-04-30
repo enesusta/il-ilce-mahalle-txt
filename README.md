@@ -11,6 +11,10 @@ Tüm id'leri ezberleyip el ile tek tek yazma şansım olmadığı içinde bu bas
 Bu örneğin sonucunda Edirne ilinin Merkez ilçesindeki mahalle isimlerini elde etmiş olacağız. Tek yapmanız gereken kullandığınız dil vasıtası ile
 dosyayı okutmak.
 
+![ALTTEXT](https://github.com/enesusta/il-ilce-mahalle-txt/blob/master/src/main/resources/source.gif)
+
+
+
 `Referans aldığım veritabanı` [Ilgili Veritabani](https://github.com/life/il-ilce-mahalle-sokak-cadde-sql)
 
  Mahalle bilgisine sahip dosyalar src/main/resources altinda bulunuyor. 
