@@ -8,9 +8,6 @@ public class Main implements SharedConstans {
 
         Cities cities = new Cities();
         cities.readResources();
-        cities.initMap();
-
-
 
     }
 }

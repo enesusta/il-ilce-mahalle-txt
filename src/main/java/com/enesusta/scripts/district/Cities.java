@@ -11,13 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Cities implements Read, Initialize {
 
-    @Getter private Map<Integer, String> citiesMap;
+    @Getter
+    private Map<Integer, String> citiesMap;
     private Database database = Database.getInstance();
 
     public Cities() {
@@ -33,68 +32,69 @@ public class Cities implements Read, Initialize {
     @Override
     public void readResources() {
 
-        String sql = "select * from harita.sehir"; // Ilgili SQL dosyasindaki isimlendirme budur.
-        FileCreator fileCreator = new FileCreator(SharedConstans.relativePath+ "city" + File.separator+"city.txt");
-        Connection connection = null;
+        String sql = "SELECT * FROM harita.sehir inner join harita.ilce on harita.sehir.sehir_key = harita.ilce.ilce_sehirkey";
+        String path = SharedConstans.relativePath.concat("city").concat(File.separator).concat("city.txt");
 
-        File createdFile = fileCreator.createFile();
 
-        try (PrintStream printStream
-                 = new PrintStream(new FileOutputStream(createdFile))
+        try (Connection connection =
+                 Database.getInstance().getConnection();
         ) {
 
-            connection = database.getConnection();
+
             PreparedStatement prst = connection.prepareStatement(sql);
-            ResultSet resultSet = prst.executeQuery();
+            ResultSet rs = prst.executeQuery();
 
-            while (resultSet.next()) {
-                printStream.println
-                    (resultSet.getString("sehir_title")+"#"+
-                        resultSet.getString("sehir_key"));
-            }
+            while (rs.next()) {
 
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
+                String filePath = SharedConstans.relativePath + "city/" +
+                    rs.getString("sehir_title") + "/" + rs.getString("ilce_title") + ".txt";
 
-    }
+                FileCreator fileCreator = new FileCreator(filePath);
+                File temp = fileCreator.createFile();
+                List<String> mahalleBilgisi = mahalleVerisiniGetir(Integer.parseInt(rs.getString("ilce_key")));
 
-    public void initMap() {
+                try (PrintStream printStream =
+                         new PrintStream(new FileOutputStream(temp))) {
 
-
-        try(InputStream inputStream
-                = new FileInputStream
-                    (new File(SharedConstans.relativePath+ "city/cities.txt"))
-        ) {
-
-            Scanner scanner = new Scanner(inputStream);
-            scanner.useDelimiter(System.lineSeparator());
-
-            while (scanner.hasNext()) {
-
-                String str = scanner.next();
-                String[] arr = str.split("#");
-
-                for(String x : arr) {
-                    System.out.println(x + "\n");
+                    for(String str : mahalleBilgisi)
+                        printStream.println(str);
+                    
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
 
-                Integer cityKey = Integer.parseInt(arr[1]);
-                citiesMap.put(cityKey,arr[0]);
             }
 
 
-        }catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
+    private List<String> mahalleVerisiniGetir(int ilceKey) {
+
+        String sql = "select * from harita.mahalle where mahalle_ilcekey = ?";
+        List<String> temp = new ArrayList<>();
+
+        try (Connection connection =
+                 Database.getInstance().getConnection()) {
+
+            PreparedStatement prst = connection.prepareStatement(sql);
+            prst.setInt(1, ilceKey);
+            ResultSet rs = prst.executeQuery();
+
+            while (rs.next())
+                temp.add(rs.getString("mahalle_title"));
 
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        return temp;
 
-
+    }
 
 
 }
