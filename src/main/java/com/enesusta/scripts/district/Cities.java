@@ -1,10 +1,6 @@
 package com.enesusta.scripts.district;
 
-import com.enesusta.scripts.district.file.FileCreator;
-import com.enesusta.scripts.district.jdbc.Database;
-import com.enesusta.scripts.district.reader.Initialize;
-import com.enesusta.scripts.district.reader.Read;
-import lombok.Getter;
+import com.enesusta.scripts.district.database.Database;
 
 import java.io.*;
 import java.sql.Connection;
@@ -13,23 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Cities implements Read, Initialize {
-
-    @Getter
-    private Map<Integer, String> citiesMap;
-    private Database database = Database.getInstance();
-
-    public Cities() {
-        init();
-    }
-
-    @Override
-    public void init() {
-        citiesMap = new HashMap<>();
-    }
+public class Cities {
 
 
-    @Override
     public void readResources() {
 
         String sql = "SELECT * FROM harita.sehir inner join harita.ilce on harita.sehir.sehir_key = harita.ilce.ilce_sehirkey";
@@ -49,20 +31,20 @@ public class Cities implements Read, Initialize {
                 String filePath = SharedConstans.relativePath + "city/" +
                     rs.getString("sehir_title") + "/" + rs.getString("ilce_title") + ".txt";
 
-                FileCreator fileCreator = new FileCreator(filePath);
-                File temp = fileCreator.createFile();
+                // FileCreator fileCreator = new FileCreator(filePath);
+                //File temp = fileCreator.createFile();
                 List<String> mahalleBilgisi = mahalleVerisiniGetir(Integer.parseInt(rs.getString("ilce_key")));
 
-                try (PrintStream printStream =
-                         new PrintStream(new FileOutputStream(temp))) {
+/**                try (PrintStream printStream =
+ new PrintStream(new FileOutputStream(temp))) {
 
-                    for(String str : mahalleBilgisi)
-                        printStream.println(str);
+ for(String str : mahalleBilgisi)
+ printStream.println(str);
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
+ } catch (FileNotFoundException e) {
+ e.printStackTrace();
+ }
+ */
             }
 
 

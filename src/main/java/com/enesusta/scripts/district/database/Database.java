@@ -1,14 +1,12 @@
-package com.enesusta.scripts.district.jdbc;
+package com.enesusta.scripts.district.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
 
-    private String hostName = "jdbc:mysql://127.0.0.1:3306/user1?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8" +
+    private String hostName = "database:mysql://127.0.0.1:3306/user1?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8" +
         "&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private String id = "";
     private String pass = "";
